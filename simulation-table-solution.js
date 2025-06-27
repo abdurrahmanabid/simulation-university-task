@@ -1,5 +1,13 @@
-const ranArrTime = [0, 913, 712, 15, 918, 309]; // example only
-const ranSerTime = [84, 10, 74, 53, 17, 79];
+let ranArrTime = [];
+let ranSerTime = [];
+
+const ranNumForAT = () => Math.floor(Math.random()*1000)
+const ranNumForST = () => Math.floor(Math.random()*100)
+
+for(let i =0;i<6;i++){
+  ranArrTime.push(ranNumForAT())
+  ranSerTime.push(ranNumForST())
+}
 
 let IAT = []
 let arrivalTime = []
@@ -8,6 +16,7 @@ let TSB = []
 let TSE = []
 let WT = []
 let TSS = []
+let ITS = []
 
 function getValueOfIAT(value) {
   if (value >= 0 && value <= 125) {
@@ -70,12 +79,15 @@ for (let i = 0; i < ranArrTime.length; i++) {
 ranSerTime.map((item => serviceTime.push(getValueOfST(item))))
 // console.log(serviceTime)
 
-//TSB and TSE 
+//TSB and TSE
+
 for (let i = 0; i < ranArrTime.length; i++) {
   TSB.length === 0 ? TSB.push(0) : TSB.push(Math.max(TSE[i - 1], arrivalTime[i]))
   WT.push(TSB[i] - arrivalTime[i])
   TSE.push(TSB[i]+serviceTime[i])
+  ITS.length===0?ITS.push(0):ITS.push(TSB[i]-TSE[i-1])
 }
+
 // console.log('TSB:',TSB);
 // console.log('WT:',WT);
 // console.log('TSE:',TSE);
@@ -85,7 +97,7 @@ WT.map((item,index)=>TSS.push(item+serviceTime[index]))
 // console.log('TSS:',TSS);
 
 
-//Print 
+//Print
 const evaluation = ranArrTime.map((item,index)=>({
   Customer: index + 1,
   ranArrTime:item,
@@ -96,8 +108,8 @@ const evaluation = ranArrTime.map((item,index)=>({
   TSB:TSB[index],
   WT:WT[index],
   TSE:TSE[index],
-  TSS:TSS[index]
+  TSS:TSS[index],
+  ITS : ITS[index]
 }))
 
 console.table(evaluation)
-
